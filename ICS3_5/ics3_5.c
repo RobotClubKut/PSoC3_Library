@@ -34,7 +34,8 @@ void Servo_Start()
 }
 
 
-int16 Servo_SetPosition(int8 id, uint16 value){
+int16 Servo_SetPosition(int8 id, uint16 value)
+{
     uint16 rx[POS_RX_SIZE];
     uint8 rxCounter = 0;
     uint8 cmd, pos_h, pos_l;
@@ -55,7 +56,9 @@ int16 Servo_SetPosition(int8 id, uint16 value){
             rx[rxCounter++] = ServoUart_GetChar();
         }
         if(err++ >= 9999)
+        {
             return -1;
+        }
     }
     tch_h = (rx[4] << 7) & 0x3f80;
     tch_l = rx[5] & 0x7f;
@@ -73,7 +76,9 @@ int8 Servo_SetParam(int8 id, Param target, uint8 value)
     uint16 err = 0;
     
     if(!(1 <= target && target <= 4))
+    {
         return -1;
+    }
     
     cmd = SET_PARAM_CMD + (id & 0x1f);
     ServoUart_PutChar(cmd);     // cmd
@@ -88,7 +93,9 @@ int8 Servo_SetParam(int8 id, Param target, uint8 value)
         }
     }
     if(err++ >= 9999)
+    {
             return -1;
+    }
     return rx[5];
 }
 
@@ -101,10 +108,14 @@ int8 Servo_GetParam(int8 id, Param target)
     uint16 err = 0;
     
     if(!(0x0 <= id && id <= 0x1f))
+    {
         return -1;
+    }
     
     if(!(1 <= target && target <= 4))
+    {
         return -1;
+    }
     
     cmd = GET_PARAM_CMD + (id & 0x1f);
     ServoUart_PutChar(cmd);     // cmd
@@ -117,7 +128,9 @@ int8 Servo_GetParam(int8 id, Param target)
             rx[rxCounter++] = ServoUart_GetChar();
         }
         if(err++ >= 9999)
+        {
             return -1;
+        }
     }
     
     return rx[4];
@@ -131,7 +144,9 @@ int8 Servo_SetId(int8 id)
     uint16 err = 0;
     
     if(!(0x0 <= id && id <= 0x1f))
+    {
         return -1;
+    }
     
     cmd = SET_ID_CMD | id;
     
@@ -147,11 +162,15 @@ int8 Servo_SetId(int8 id)
             rx[rxCounter++] = ServoUart_GetChar();
         }
         if(err++ >= 9999)
+        {
             return -1;
+        }
     }
     
     if(rx[4] != id)
+    {
         return -1;
+    }
     
     return rx[4] & 0x1f;
 }
@@ -174,7 +193,9 @@ int8 Servo_GetId()
             rx[rxCounter++] = ServoUart_GetChar();
         }
         if(err++ >= 9999)
+        {
             return -1;
+        }
     }
     
     return rx[4] & 0x1f;
