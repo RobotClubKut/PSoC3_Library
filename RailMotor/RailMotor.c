@@ -178,7 +178,7 @@ void RailMotor_posRampControl( RailMotor* this,const int16 pos,const int16 axelP
 		{
 			this->PosRamp.dir = 1;
 		}
-		else if(this->PosRamp.defPosInit > 0)
+		else if(this->PosRamp.defPosInit < 0)
 		{
 			this->PosRamp.dir = -1;
 		}
