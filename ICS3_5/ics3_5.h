@@ -56,6 +56,20 @@ int8 Servo_GetId();
 int16 Servo_SetPosition(int8 id, uint16 value);
 
 /*
+ * サーボの角度を度で設定する関数
+ * 引数: int8 id    対象のサーボID値(0~31)
+ *      int16 value    設定する度数(-135~+135)
+ * 返り値: int16    サーボから返ってきた度数, エラーなら-1
+ */
+int16 Servo_SetAngle(int8 id,int16 angle);
+/*
+ * サーボの角度を度で確認する関数
+ * 引数: int8 id    対象のサーボID値(0~31)
+ * 返り値: int16    サーボから返ってきた度数, エラーなら-1
+ */
+int16 Servo_GetAngle(int8 id);
+
+/*
  * サーボのパラメータを設定する関数
  * 引数: int8 id    対象のサーボID値(0~31)
  *      Param target    設定するパラメータを指定(Paramの定義を参照...)

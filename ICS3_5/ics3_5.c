@@ -66,8 +66,22 @@ int16 Servo_SetPosition(int8 id, uint16 value)
     
     return ret;
 }
-
-
+int16 Servo_SetAngle(int8 id,int16 angle)
+{
+    int16 ret = Servo_SetPosition(id,(uint16)(angle*29.629629f+7000));
+    if(ret == -1){
+        return -1;
+    }
+    return (ret - 7000)/29.629629f;
+}
+int16 Servo_GetAngle(int8 id)
+{
+    int16 ret = Servo_SetPosition(id,0);
+    if(ret == -1){
+        return -1;
+    }
+    return (ret - 7000)/29.629629f;
+}
 int8 Servo_SetParam(int8 id, Param target, uint8 value)
 {
     uint8 rx[SET_RX_SIZE];
@@ -150,6 +164,7 @@ int8 Servo_SetId(int8 id)
     
     cmd = SET_ID_CMD | id;
     
+    ServoUart_ClearRxBuffer();
     ServoUart_PutChar(cmd);
     ServoUart_PutChar(0x01);
     ServoUart_PutChar(0x01);
@@ -161,10 +176,12 @@ int8 Servo_SetId(int8 id)
         {
             rx[rxCounter++] = ServoUart_GetChar();
         }
-        if(err++ >= 9999)
+        if(err++ >= 10000)
         {
             return -1;
         }
+        
+        CyDelayUs(1);
     }
     
     if(rx[4] != id)
@@ -181,6 +198,7 @@ int8 Servo_GetId()
     uint8 rxCounter = 0;
     uint16 err = 0;
     
+    ServoUart_ClearRxBuffer();
     ServoUart_PutChar(GET_ID_CMD);
     ServoUart_PutChar(0);
     ServoUart_PutChar(0);
@@ -192,10 +210,11 @@ int8 Servo_GetId()
         {
             rx[rxCounter++] = ServoUart_GetChar();
         }
-        if(err++ >= 9999)
+        if(err++ >= 10000)
         {
             return -1;
         }
+        CyDelayUs(1);
     }
     
     return rx[4] & 0x1f;
